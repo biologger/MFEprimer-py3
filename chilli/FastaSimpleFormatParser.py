@@ -55,7 +55,7 @@ def parse(fh):
     line = ''
     while True:
         try:
-            line = fh.next().strip()
+            line = fh.__next__().strip()
         except StopIteration:
             break
 
@@ -77,7 +77,7 @@ def parse(fh):
         size = 0
         while True:
             try:
-                line = fh.next().strip()
+                line = fh.__next__().strip()
             except StopIteration:
                 eof = True
                 break
@@ -102,9 +102,9 @@ def main ():
     infile = args[0]
     records = parse(open(infile))
     for record in records:
-        print record['id']
-        print record['desc']
-        print record['seq']
+        print(record['id'])
+        print(record['desc'])
+        print(record['seq'])
 
 if __name__ == '__main__':
     main()

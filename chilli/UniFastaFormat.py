@@ -16,8 +16,8 @@ Version = '1.0'
 import sys
 import os
 from optparse import OptionParser
-import chilli
-import FastaSimpleFormatParser
+from chilli import chilli
+from chilli import FastaSimpleFormatParser
 
 
 def get_opt():
@@ -39,11 +39,12 @@ def get_opt():
 
 def print2stderr(msg):
     '''Print msg to sys.stderr and exit the program'''
-    print >> sys.stderr, msg
+    print(msg, file=sys.stderr)
     exit()
 
 def convert(infile, outfile, cache_name):
     '''Convert'''
+    # (infile, outfile, cache_name) = (infile, convert_db, cache_name)
     fh = open(infile)
     fo = open(outfile, 'w')
 
@@ -60,7 +61,7 @@ def convert(infile, outfile, cache_name):
             line = '>%s %s' % (sn, line[1:])
             sn += 1
 
-	fo.write(line + os.linesep)
+        fo.write(line + os.linesep)
 
     fh.close()
     fo.close()
@@ -85,6 +86,14 @@ def convert(infile, outfile, cache_name):
 def main ():
     '''Main'''
     options = get_opt()
+    ### delete this
+    # options.infile = 'MFEprimer-2.0/test/test.rna'
+    # infile = 'MFEprimer-2.0/test/test.rna'
+    # convert_db =infile + '.unifasta'
+    # cache_name =infile + '.uni'
+    # convert(infile, convert_db, cache_name)
+    ### delete this
+
     convert_db = options.infile + '.unifasta'
     cache_name = options.infile + '.uni'
     convert(options.infile, convert_db, cache_name)

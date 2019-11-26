@@ -36,7 +36,7 @@ def parse(fh):
     # Filter the first description lines
     while True:
         try:
-            line = fh.next()
+            line = fh.__next__()
         except:
             break
 
@@ -45,7 +45,7 @@ def parse(fh):
 
     while True:
         try:
-            line = fh.next()
+            line = fh.__next__()
         except:
             break
 
@@ -130,9 +130,9 @@ def main ():
     get_opt()
     amp_list = parse(args.infile)
     for amp in amp_list:
-        print amp.id, amp.fp_id, amp.rp_id
-        print amp.size, amp.gc, amp.fp_tm, amp.rp_tm, amp.fp_dg, amp.rp_dg
-        print amp.seq
+        print(amp.id, amp.fp_id, amp.rp_id)
+        print(amp.size, amp.gc, amp.fp_tm, amp.rp_tm, amp.fp_dg, amp.rp_dg)
+        print(amp.seq)
 
 if __name__ == '__main__':
     main()

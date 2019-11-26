@@ -60,20 +60,20 @@ def get_opt():
     '''Check and parsing the opts'''
     parser = argparse.ArgumentParser(prog='MFEprimer', description='MFEprimer: A fast and thermodynamics-based PCR primer specificity checking program.', usage='%(prog)s.py [options] -i primers.fasta -d Human.genomic.fasta')
     parser.add_argument('-i', '--infile', nargs='?', type=argparse.FileType('r'),
-	    default=sys.stdin, help='[Required] Primer sequences for specificity checking. [File]', required=True)
+        default=sys.stdin, help='[Required] Primer sequences for specificity checking. [File]', required=True)
     parser.add_argument('-d', '--database', nargs='+', type=str, 
-	    help='[Required] Database name for specificity checking.', required=True)
+        help='[Required] Database name for specificity checking.', required=True)
     parser.add_argument('-o', '--outfile', nargs='?', type=argparse.FileType('w'),
-	    default=sys.stdout, help='[Optional] Output file name for storing the results, default is screen. [File]', required=False)
+        default=sys.stdout, help='[Optional] Output file name for storing the results, default is screen. [File]', required=False)
 
     parser.add_argument('-k', '--k_value', nargs='?', type=int,
-	    default=9, help='[Optional] K value, must be identical to the k value when indexing the database. [Integer]', required=False)
+        default=9, help='[Optional] K value, must be identical to the k value when indexing the database. [Integer]', required=False)
 
     parser.add_argument('--amplicon', action='store_true',
-	    help='[Optional] Produce the amplicons sequence in Fasta format, only works for normal output format (not tabular).')
+        help='[Optional] Produce the amplicons sequence in Fasta format, only works for normal output format (not tabular).')
 
     parser.add_argument('--tab', action='store_true',
-	    help='[Optional] Output in tabular format.')
+        help='[Optional] Output in tabular format.')
 
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 2.0')
 
@@ -85,37 +85,37 @@ def get_opt():
     filter_group.add_argument('--size_stop', nargs='?', help='[Optional] Upper limit of the expected amplicon size range in bp, default = 5000. [Integer]', default=2000, type=int)
 
     filter_group.add_argument('--tm_start', nargs='?', help='[Optional] Lower limit of the Melting temperature (Tm) [Celsius degree], default = 0. [Float]', default=0, type=float)
-    filter_group.add_argument('--tm_stop', nargs='?', help='[Optional] Upper limit of the Melting temperature (Tm) [Celsius degree], default = unlimited. [Float]', default=sys.maxint, type=float)
+    filter_group.add_argument('--tm_stop', nargs='?', help='[Optional] Upper limit of the Melting temperature (Tm) [Celsius degree], default = unlimited. [Float]', default=sys.maxsize, type=float)
 
-    filter_group.add_argument('--dg_start', nargs='?', help='[Optional] Lower limit of the Gibbs free energy for the last 5 resides at 3\' end of the primer [kcal/mol], default = unlimited. [Float]', default=-sys.maxint, type=float)
+    filter_group.add_argument('--dg_start', nargs='?', help='[Optional] Lower limit of the Gibbs free energy for the last 5 resides at 3\' end of the primer [kcal/mol], default = unlimited. [Float]', default=-sys.maxsize, type=float)
     filter_group.add_argument('--dg_stop', nargs='?', help='[Optional] Upper limit of the Gibbs free energy for the last 5 resides at 3\' end of the primer [kcal/mol], default = 0. [Float]', default=0, type=float)
 
     thermo_group = parser.add_argument_group('Experimental settings:' ,'set these arguments for your real experimental values.')
     thermo_group.add_argument('--mono_conc', nargs='?', type=float,
-	    default=50, help='[Optional] Concentration of monovalent cations [mM], default = 50.0 [Float]', required=False)
+        default=50, help='[Optional] Concentration of monovalent cations [mM], default = 50.0 [Float]', required=False)
     thermo_group.add_argument('--diva_conc', nargs='?', type=float,
-	    default=1.5, help='[Optional] Concentration of divalent cations [mM], default = 1.5 [Float]', required=False)
+        default=1.5, help='[Optional] Concentration of divalent cations [mM], default = 1.5 [Float]', required=False)
     thermo_group.add_argument('--oligo_conc', nargs='?', type=float,
-	    default=50, help='[Optional] Concentration of annealing oligos [nM], default = 50.0 [Float]', required=False)
+        default=50, help='[Optional] Concentration of annealing oligos [nM], default = 50.0 [Float]', required=False)
     thermo_group.add_argument('--dntp_conc', nargs='?', type=float,
-	    default=0.25, help='[Optional] Concentration of dNTPs [nM], default = 0.25 [Float]', required=False)
+        default=0.25, help='[Optional] Concentration of dNTPs [nM], default = 0.25 [Float]', required=False)
 
     options = parser.parse_args()
     if options.ppc < 0 or options.ppc > 100:
-	print 'Error: Illegal value for ppc'
-	exit()
+        print('Error: Illegal value for ppc')
+        exit()
 
     if options.size_start > options.size_stop or options.size_start < 0:
-	print 'Illegal value for size_start or size_stop'
-	exit()
+        print('Illegal value for size_start or size_stop')
+        exit()
 
     if options.tm_start > options.tm_stop or options.tm_start < 0:
-	print 'Illegal value for tm_start or tm_stop'
-	exit()
+        print('Illegal value for tm_start or tm_stop')
+        exit()
 
     if options.dg_start > options.dg_stop or options.dg_start > 0:
-	print 'Illegal value for dg_start or DeltagG_stop'
-	exit()
+        print('Illegal value for dg_start or DeltagG_stop')
+        exit()
 
     return options
 
@@ -141,7 +141,7 @@ def primer_analysis(product, options, oligos, session_dir, fcdict, db):
     filter_product = []
 
     # Forward primer
-    for i in xrange(len(product)):
+    for i in range(len(product)):
         # Reverse primer
         #print i
         amp = product[i]
@@ -195,7 +195,7 @@ def primer_analysis(product, options, oligos, session_dir, fcdict, db):
         filter_product.append(amp)
 
     mid_seq_list = get_mid_seq(mid_seq_id_list, options, session_dir, db)
-    for i in xrange(len(mid_seq_list)):
+    for i in range(len(mid_seq_list)):
         mid_seq = mid_seq_list[i]
         (ave_Tm, ppc, p_3_DeltaG, m_3_DeltaG) = tmp_list[i]
         amp = filter_product[i]
@@ -235,7 +235,7 @@ def format_output_primer(amp_list, oligos, options, start_time, session_dir):
     out = print_head(out, options)
 
     ID_list = []
-    for i in xrange(len(oligos)):
+    for i in range(len(oligos)):
         ID_list.append(oligos[i]['id'])
 
     query_line = textwrap.fill('Query = %s' % ('; '.join(ID_list)), 80)
@@ -331,7 +331,7 @@ def format_output_primer(amp_list, oligos, options, start_time, session_dir):
         detail_line.append('  ' + 'PPC = %s%%, Size = %s bp, GC content = %.1f%%' % (ppc, amp_len, amp_GC))
         detail_line.append('  ' + 'FP: Tm = %.1f (%s), %sG = %.1f (kcal/mol), 3\'%sG = %.1f (kcal/mol)' % (p_Tm, u'\u2103', u'\u0394', p_DeltaG, u'\u0394', p_3_DeltaG))
         detail_line.append('  ' + 'RP: Tm = %.1f (%s), %sG = %.1f (kcal/mol), 3\'%sG = %.1f (kcal/mol)' % (m_Tm, u'\u2103', u'\u0394', m_DeltaG, u'\u0394', m_3_DeltaG))
-	detail_line.append('  ' + 'Binding sites: %s(%s/%s) ... %s(%s/%s)' % (p_sb, len(p_aseq), f_len, m_se, len(m_aseq), r_len))
+        detail_line.append('  ' + 'Binding sites: %s(%s/%s) ... %s(%s/%s)' % (p_sb, len(p_aseq), f_len, m_se, len(m_aseq), r_len))
         detail_line.append(linesep)
         detail_line.append(amp_graphic + linesep)
         fa_seq = chilli.print_seq(amp_seq, 80)
@@ -343,7 +343,7 @@ def format_output_primer(amp_list, oligos, options, start_time, session_dir):
     out.append(linesep)
     out.append('Details for the primers binding to the DNA template') 
     out.append('[Sorted by average Tm in descending order]' + linesep)
-    for i in xrange(len(detail_line)):
+    for i in range(len(detail_line)):
         line = detail_line[i]
         out.append(line)
 
@@ -351,7 +351,7 @@ def format_output_primer(amp_list, oligos, options, start_time, session_dir):
     out = print_foot(out, options, start_time)
 
     out = os.linesep.join(out)
-    options.outfile.write(out.encode('utf-8'))
+    options.outfile.write(out)
 
     if options.amplicon:
         try:
@@ -391,12 +391,12 @@ def print_foot(out, options, start_time):
 
     out.append(('Tm start [%s]: ' % (u'\u2103')).rjust(41) + str(options.tm_start))
 
-    if options.tm_stop == sys.maxint:
+    if options.tm_stop == sys.maxsize:
         tm_stop = 'Unlimited'
     else:
         tm_stop = options.tm_stop
 
-    if options.dg_start == -sys.maxint:
+    if options.dg_start == -sys.maxsize:
         dg_start = 'Unlimited'
     else:
         dg_start = options.dg_start
@@ -489,24 +489,24 @@ def get_mid_seq(mid_seq_id_list, options, session_dir, db):
     outfile = os.path.join(session_dir, tmp_name)
     twoBitDB = db + '.2bit'
 
-    cmd = '%s%stwoBitToFa -seqList=%s %s %s' % (bin_path, os.sep, mid_seq_id_list_file, twoBitDB, outfile)
+    cmd = 'MFEprimer_%s_%s_twoBitToFa -seqList=%s %s %s' % (platform.system(), get_bit(), mid_seq_id_list_file, twoBitDB, outfile)
 
     try:
         out, err = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
     except:
         msg = 'Error: twoBitToFa running error.'
-	print msg
+        print(msg)
         print2stderr(msg)
     
     if err:
-	print err
+        print(err)
         print2stderr(err)
 
     try:
         fh = open(outfile)
     except:
         msg = 'Error: twoBitToFa running error: no output file produced.'
-	print msg
+        print(msg)
         print2stderr(msg)
 
     records = FastaFormatParser.parse(fh)
@@ -519,7 +519,7 @@ def get_mid_seq(mid_seq_id_list, options, session_dir, db):
 
 def print2stderr(msg):
     '''Print the error message to STDERR'''
-    print >> sys.stderr, msg
+    print(msg, file=sys.stderr)
     exit()
 
 def get_pos_data(data):
@@ -541,17 +541,17 @@ def get_position(options, mer_id, db):
     query = "select plus, minus from pos where mer_id=%s" %  mer_id
     cur.execute(query)
     try:
-	(plus, minus) = cur.fetchone()
+        (plus, minus) = cur.fetchone()
     except:
-	print "Error found when retrieving position values from indexed database"
-	print "Is the k-value right?"
-	exit()
+        print("Error found when retrieving position values from indexed database")
+        print("Is the k-value right?")
+        exit()
 
     if plus:
-	plus_pos = get_pos_data(plus)
+        plus_pos = get_pos_data(plus)
 
     if minus:
-	minus_pos = get_pos_data(minus)
+        minus_pos = get_pos_data(minus)
 
     cur.close()
     conn.close()
@@ -559,12 +559,16 @@ def get_position(options, mer_id, db):
 
 def check_infile(options):
     '''Check and return Oligos'''
+
+    ## delete this
+    # err_or_degenerate = SeqCheck.fasta_format_check(open("test/p.fa"))
+    ## delete this
     err_or_degenerate = SeqCheck.fasta_format_check(options.infile)
     if err_or_degenerate in ['yes', 'no']:
-	global degenerate
-	degenerate = err_or_degenerate
+        global degenerate
+        degenerate = err_or_degenerate
     else:
-	print2stderr(err_or_degenerate)
+        print2stderr(err_or_degenerate)
 
     options.infile.seek(0)
 
@@ -606,14 +610,14 @@ def primer_process(options, session_dir, fcdict, db, oligos):
     product = []
     binding_range = []
     binding_primer = []
-    for i in xrange(len(oligos)):
+    for i in range(len(oligos)):
         p_list = oligo_pos[i]['p_list']
         p_oligo_length = oligos[i]['size']
-        for k in xrange(len(oligos)):
+        for k in range(len(oligos)):
             m_list = oligo_pos[k]['m_list']
             m_oligo_length = oligos[k]['size']
 
-            for j in p_list.iterkeys():
+            for j in p_list.keys():
                 hid = str(j) # Because the database has been re-formated
                 try:
                     p_pos = p_list[j]
@@ -623,13 +627,13 @@ def primer_process(options, session_dir, fcdict, db, oligos):
 
                 for p in p_pos:
                     left = get_pos_range(p, m_pos)
-                    for pos_index in xrange(left, len(m_pos)):
-			f3_pos = p+1
-			r3_pos = m_pos[pos_index]
+                    for pos_index in range(left, len(m_pos)):
+                        f3_pos = p+1
+                        r3_pos = m_pos[pos_index]
 
                         # The amplicon size <= p.len + m.len
-			if f3_pos >= r3_pos:
-			    continue
+                        if f3_pos >= r3_pos:
+                            continue
 
                         product_size = p_oligo_length + m_pos[pos_index] - p + m_oligo_length - 1
 
@@ -702,7 +706,7 @@ def extract_by_twoBitToFa(id_pos_range_list, options, session_dir, db):
     outfile = os.path.join(session_dir, tmp_name)
     twoBitDB = db + '.2bit'
 
-    cmd = '%s%stwoBitToFa -seqList=%s %s %s' % (bin_path, os.sep, id_pos_range_list_file, twoBitDB, outfile)
+    cmd = 'MFEprimer_%s_%s_twoBitToFa -seqList=%s %s %s' % (platform.system(),get_bit(), id_pos_range_list_file, twoBitDB, outfile)
 
     try:
         out, err = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
@@ -733,32 +737,32 @@ def Thermodynamics_alignment(fp, ts, primer_type):
     ts = ts.upper()
     aseq = [':',] # Alignment seq
     if primer_type == 'forward':
-	fp = fp[::-1]
-	ts = ts[::-1]
+        fp = fp[::-1]
+        ts = ts[::-1]
 
     i = 1
     while i < len(ts):
         fp_di = fp[(i-1) : (i+1)]
         ts_di = ts[(i-1) : (i+1)]
-	if fp_di == ts_di:
-            aseq.append(':')
-	else:
-	    if fp_di in nn_mm_data:
-	        if ts_di in nn_mm_data[fp_di]:
-                    try:
-                        if fp[i+1] == ts[i+1]:
-                            aseq.append('.:')
-			    i += 1
-		        else:
-		            break
-                    except:
-                        break
-		else:
-		    break
-	    else:
-	        break
+        if fp_di == ts_di:
+                aseq.append(':')
+        else:
+            if fp_di in nn_mm_data:
+                if ts_di in nn_mm_data[fp_di]:
+                        try:
+                            if fp[i+1] == ts[i+1]:
+                                aseq.append('.:')
+                                i += 1
+                            else:
+                                break
+                        except:
+                            break
+                else:
+                    break
+            else:
+                break
 
-	i += 1
+        i += 1
 
     aseq = ''.join(aseq)
     if primer_type == 'forward':
@@ -769,7 +773,7 @@ def Thermodynamics_alignment(fp, ts, primer_type):
 def get_align_seq(seq_list, options, product):
     '''Alignment seq'''
     filter_product = []
-    for i in xrange(len(product)):
+    for i in range(len(product)):
         amp = product[i]
         pseq = amp['pseq']
         mseq = amp['mseq']
@@ -836,7 +840,7 @@ def tab_out(amp_list, oligos, options, start_time, session_dir):
 
         amp_len = amp['size']
 
-	# p for plus, m for minus primer # History reason
+        # p for plus, m for minus primer # History reason
 
         p_qid = amp['pid']
         f_3_pos = amp['f3_pos'] 
@@ -867,18 +871,19 @@ def tab_out(amp_list, oligos, options, start_time, session_dir):
         else:
             ppc = '%.1f' % ppc
 
-	options.outfile.write("%d\t%s\t%s\t%s\t%s\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%d\t%d\t%s\n" % (sn, p_qid, m_qid, real_hid, ppc, amp_len, amp_GC, p_Tm, m_Tm, p_DeltaG, m_DeltaG, p_sb, m_se, amp_seq))
-
+        options.outfile.write("%d\t%s\t%s\t%s\t%s\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%d\t%d\t%s\n" % (sn, p_qid, m_qid, real_hid, ppc, amp_len, amp_GC, p_Tm, m_Tm, p_DeltaG, m_DeltaG, p_sb, m_se, amp_seq))
 
 def process_primer(options, session_dir):
     '''Primer task'''
+
     if not isinstance(options.database, list):
         options.database = [options.database]
 
-    if not isinstance(options.infile, file):
+    if not hasattr(options.infile, 'read'):
         options.infile = open(options.infile)
 
     oligos = check_infile(options)
+
     amp = []
     for db in options.database:
         fcdict_cache = db + '.uni'
@@ -900,17 +905,15 @@ def main():
     start_time = time.time()
     amp_list, oligos = process_primer(options, session_dir)
     if options.tab:
-	tab_out(amp_list, oligos, options, start_time, session_dir)
+        tab_out(amp_list, oligos, options, start_time, session_dir)
     else:
-	format_output_primer(amp_list, oligos, options, start_time, session_dir)
+        format_output_primer(amp_list, oligos, options, start_time, session_dir)
 
     # Clean session tmp directory
     try:
-      shutil.rmtree(session_dir)
+        shutil.rmtree(session_dir)
     except:
-      pass
-
-
+        pass
 
 if __name__ == '__main__':
     main()

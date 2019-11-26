@@ -40,6 +40,7 @@ Version = '1.2'
 
 from optparse import OptionParser
 
+
 def get_opt():
     '''Options and args'''
     usage = 'Usage: %prog fasta_format_file'
@@ -51,27 +52,28 @@ def get_opt():
 
     return options, args
 
+
 def parse(fh):
     '''The Parser'''
     records = []
 
-    if not isinstance(fh, file):
-        import StringIO
+    if not hasattr(fh, 'read'):
+        import io
         if isinstance(fh, list):
             import os
             fh = os.linesep.join(fh)
 
-        fh = StringIO.StringIO(fh)
+        fh = io.StringIO(fh)
 
     # Remove the comment and blank lines before the first record
     line = ''
     while True:
         try:
-            line = fh.next().strip()
+            line = fh.__next__().strip()
         except StopIteration:
             break
 
-        if not line: continue # Blank line
+        if not line: continue  # Blank line
 
         if line.startswith('>'):
             break
@@ -89,7 +91,7 @@ def parse(fh):
         seq_list = []
         while True:
             try:
-                line = fh.next().strip()
+                line = fh.__next__().strip()
             except StopIteration:
                 eof = True
                 break
@@ -101,26 +103,27 @@ def parse(fh):
 
         seq = ''.join(seq_list)
         record = {
-            'id' : id,
-            'desc' : desc,
-            'seq' : seq.lower(),
-            'size' : len(seq),
+            'id': id,
+            'desc': desc,
+            'seq': seq.lower(),
+            'size': len(seq),
         }
         records.append(record)
 
     return records
 
-def main ():
+
+def main():
     '''Main'''
     options, args = get_opt()
     infile = args[0]
     records = parse(open(infile))
     for record in records:
-        print record['id']
-        print record['desc']
-        print record['seq']
-        print record['size']
+        print(record['id'])
+        print(record['desc'])
+        print(record['seq'])
+        print(record['size'])
+
 
 if __name__ == '__main__':
     main()
-

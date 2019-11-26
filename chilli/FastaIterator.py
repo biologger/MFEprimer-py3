@@ -42,20 +42,23 @@ def parse(fh):
     '''
     A Fasta-format Parser return Iterator
     '''
-    if not isinstance(fh, file):
-        import StringIO
+    ## delete this
+    # fh = open(filename)
+    ## delete this
+    if not hasattr(fh, 'read'):
+        import io
         if isinstance(fh, list):
             import os
             fh = os.linesep.join(fh)
 
-        fh = StringIO.StringIO(fh)
+        fh = io.StringIO(fh)
 
     # Remove the comment and blank lines before the first record
     while True:
         line = fh.readline()
         if not line: return # Blank line
-	
-	line = line.strip()
+
+        line = line.strip()
 
         if line.startswith('>'):
             break
@@ -71,14 +74,14 @@ def parse(fh):
         while True:
             if not line: break
 
-	    line = line.strip()
+            line = line.strip()
 
             if line.startswith('>'):
                 break
 
-	    if not line: 
-		line = fh.readline()
-		continue
+            if not line:
+                line = fh.readline()
+                continue
 
             seq_lines.append(line.replace(' ', '').replace("\r", ''))
             line = fh.readline()
@@ -103,10 +106,9 @@ def main ():
     records = parse(open(infile))
     i = 0
     for a in records:
-	i += 1
-        print a.id, a.desc, a.size, i
-        print a.seq
-
+        i += 1
+        print(a.id, a.desc, a.size, i)
+        print(a.seq)
 
 if __name__ == '__main__':
     main()

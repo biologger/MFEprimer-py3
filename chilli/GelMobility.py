@@ -65,6 +65,7 @@ other viruses by agarose-gel electrophoresis. Journal of Virology,
 
 import sys
 
+
 def load_gel_para_dict(gel_conc=1.0, formula='Helling'):
     gel_para_dict = {}
     gel_para_dict['Helling'] = {}
@@ -72,53 +73,55 @@ def load_gel_para_dict(gel_conc=1.0, formula='Helling'):
     # Parameter for Helling's formula
     gel_para = {}
     gel_para[0.5] = {
-	'a' : 2.7094,
-	'b' : 0.2691,
-	'k' : 464.4412,
+        'a': 2.7094,
+        'b': 0.2691,
+        'k': 464.4412,
     }
 
     gel_para[1.0] = {
-	'a' : 2.3977,
-	'b' : 0.2700,
-	'k' : 73.9788,
+        'a': 2.3977,
+        'b': 0.2700,
+        'k': 73.9788,
     }
 
     gel_para[1.5] = {
-	'a' : 2.3221,
-	'b' : 0.2634,
-	'k' : 48.0873,
+        'a': 2.3221,
+        'b': 0.2634,
+        'k': 48.0873,
     }
 
     gel_para[2.0] = {
-	'a' : 2.1333,
-	'b' : 0.2561,
-	'k' : 18.5417,
+        'a': 2.1333,
+        'b': 0.2561,
+        'k': 18.5417,
     }
 
     gel_para_dict['Helling'] = gel_para
 
     err_msg = 'Gel concentration or formula is illegal, Currently, only 0.5, 1, 1.5, 2.0 for concentration and "Helling" for formula are allowed.'
 
-    try: 
+    try:
         gel_conc = float(gel_conc)
         a = gel_para_dict[formula][gel_conc]['a']
         b = gel_para_dict[formula][gel_conc]['b']
         k = gel_para_dict[formula][gel_conc]['k']
     except:
-	print >> sys.stderr, err_msg
-	exit()
+        print(err_msg,  file=sys.stderr)
+        exit()
 
     return gel_para_dict, a, b, k
+
 
 def get_size_range(size, gel_conc=1.0, ref_mobility=50, offset=2, formula='Helling'):
     Y = cal_mobility(size, gel_conc)
     offset = int(offset)
     # Set 2 mm as the distance which the bands can be \
-            #seperated by naked eyes
+    # seperated by naked eyes
     Xmin = cal_size(Y + offset, gel_conc=gel_conc, ref_mobility=ref_mobility, formula='Helling')
     Xmax = cal_size(Y - offset, gel_conc=gel_conc, ref_mobility=ref_mobility, formula='Helling')
 
     return Xmin, Xmax
+
 
 def cal_mobility(X, gel_conc=1.0, ref_mobility=50, formula='Helling'):
     '''Cal mobility based on size'''
@@ -135,12 +138,13 @@ def cal_mobility(X, gel_conc=1.0, ref_mobility=50, formula='Helling'):
         Y = a - b * math.log(X + k)
     else:
         pass
-        #Y = math.exp(a - b * math.log(X + k))
+        # Y = math.exp(a - b * math.log(X + k))
 
     # Y: the relative mobility = mobility distance / ref_mobility
     Y = Y * ref_mobility
     # Y: the mobility distance
     return round(Y, 1)
+
 
 def cal_size(Y, gel_conc=1.0, ref_mobility=50, formula='Helling'):
     '''Predict size based on the relative mobility'''
@@ -152,26 +156,26 @@ def cal_size(Y, gel_conc=1.0, ref_mobility=50, formula='Helling'):
     Y = Y / ref_mobility
     # ref_mobility: the mobility distance of the fastest DNA segment
     if formula == 'Helling':
-        #Y = a - b * math.log(X + k)
+        # Y = a - b * math.log(X + k)
         X = math.exp((a - Y) / b) - k
     else:
         pass
 
     return int(round(X, 0))
 
-def main ():
+
+def main():
     '''Test'''
     import sys
-    #X = 100
-    #gel_conc = sys.argv[1]
-    #mobility = cal_mobility(X, gel_conc, ref_mobility=50, formula='Helling')
-    #print mobility
-    #mobility = cal_mobility(X, gel_conc, ref_mobility=50)
-    #print mobility
+    # X = 100
+    # gel_conc = sys.argv[1]
+    # mobility = cal_mobility(X, gel_conc, ref_mobility=50, formula='Helling')
+    # print mobility
+    # mobility = cal_mobility(X, gel_conc, ref_mobility=50)
+    # print mobility
     min, max = get_size_range(sys.argv[2], gel_conc=1.0, ref_mobility=50, offset=sys.argv[1], formula='Helling')
-    print min, max
+    print(min, max)
 
 
 if __name__ == '__main__':
     main()
-

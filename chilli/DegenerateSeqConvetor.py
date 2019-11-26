@@ -16,8 +16,8 @@ Version = '1.0'
 import sys
 import os
 from optparse import OptionParser
-import FastaFormatParser as FFP
-import chilli
+from chilli import FastaFormatParser as FFP
+from chilli import chilli
 
 iupac_dict = {
     'a' : 'a',
@@ -72,10 +72,12 @@ def get_opt():
 
     return options
 
-def iupac2normal(seq, prefixes=['']):
+def iupac2normal(seq, prefixes=None):
     '''Returns a list containing degenerate nucleic acid sequences based on the IUPAC table
     Reference: http://lists.open-bio.org/pipermail/biopython/2006-September/003190.html 
     '''
+    if prefixes is None:
+        prefixes = ['']
     if len(seq) == 0:
         return prefixes
     else:
@@ -136,7 +138,7 @@ def main ():
     result_fasta_array = convert(records)
     out = format2fasta(result_fasta_array)
     if options.outfile == sys.stdout:
-        print out
+        print(out)
     else:
         fo = open(options.outfile, 'w')
         fo.write(out)

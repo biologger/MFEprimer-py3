@@ -53,7 +53,7 @@ def get_opt():
 def main ():
     '''Main'''
     #options = get_opt()
-    print pt
+    print(pt)
 
 if __name__ == '__main__':
     main()

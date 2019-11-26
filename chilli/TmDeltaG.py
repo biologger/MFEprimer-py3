@@ -20,8 +20,8 @@ License = 'GPL v3'
 Version = '1.0'
 
 import math
-import Seq
-import ThermodynamicsParameters as TP
+from chilli import Seq
+from chilli import ThermodynamicsParameters as TP
 
 def calDeltaHS(qseq, sseq): 
     """ Calculate deltaH and deltaS """
@@ -39,7 +39,7 @@ def calDeltaHS(qseq, sseq):
         deltaH = 0
         deltaS = 0
 
-    for i in xrange(len(qseq) - 1):
+    for i in range(len(qseq) - 1):
         dinuc = '%s%s' % (qseq[i : (i+2)], sseq[i : (i+2)])
         if dinuc in TP.dH_full and dinuc in TP.dS_full:
             deltaH += TP.dH_full[dinuc]
@@ -55,7 +55,7 @@ def calDeltaG(qseq, sseq, mono_conc=50, diva_conc=1.5, dntp_conc=0.25, deltaH=No
     dntp_conc = float(dntp_conc)
 
     if not (deltaH and deltaS):
-	deltaH, deltaS = calDeltaHS(qseq, sseq)
+        deltaH, deltaS = calDeltaHS(qseq, sseq)
 
     # Calculate the free Gibbs energy
     tao = 273.15 + 37 # Constant temperature tao in Kelvin
@@ -78,7 +78,7 @@ def calTm(qseq, sseq, mono_conc=50, diva_conc=1.5, oligo_conc=50, dntp_conc=0.25
     dntp_conc = float(dntp_conc)
 
     if not (deltaH and deltaS):
-	deltaH, deltaS = calDeltaHS(qseq, sseq)
+        deltaH, deltaS = calDeltaHS(qseq, sseq)
 
     deltaH = deltaH * 1000
 
@@ -100,7 +100,7 @@ def divalent2monovalent(divalent, dntp):
         dntp = 0
 
     if divalent < 0 or dntp <0: 
-        print >> sys.stderr, 'Error: divalent2monovalent, please contact Wubin Qu <quwubin@gmail.com>.'
+        print('Error: divalent2monovalent, please contact Wubin Qu <quwubin@gmail.com>.', file=sys.stderr)
         exit()
 
     if divalent < dntp:
@@ -111,9 +111,9 @@ def divalent2monovalent(divalent, dntp):
 
 class Cal():
     def __init__(self, qseq, sseq, mono_conc=50, diva_conc=1.5, oligo_conc=50, dntp_conc=0.25):
-	deltaH, deltaS = calDeltaHS(qseq, sseq)
-	self.Tm = calTm(qseq, sseq, mono_conc=mono_conc, diva_conc=diva_conc, oligo_conc=oligo_conc, dntp_conc=dntp_conc,deltaH=deltaH, deltaS=deltaS)
-	self.DeltaG = calDeltaG(qseq, sseq, mono_conc=mono_conc, diva_conc=diva_conc, dntp_conc=dntp_conc,deltaH=deltaH, deltaS=deltaS)
+        deltaH, deltaS = calDeltaHS(qseq, sseq)
+        self.Tm = calTm(qseq, sseq, mono_conc=mono_conc, diva_conc=diva_conc, oligo_conc=oligo_conc, dntp_conc=dntp_conc,deltaH=deltaH, deltaS=deltaS)
+        self.DeltaG = calDeltaG(qseq, sseq, mono_conc=mono_conc, diva_conc=diva_conc, dntp_conc=dntp_conc,deltaH=deltaH, deltaS=deltaS)
 
 def main():
     qseq = 'TATACTTT'
@@ -126,8 +126,8 @@ def main():
     oligo = 50
     dntp = 0.25
     seq = Cal(qseq, sseq, mono_conc=50, diva_conc=1.5, oligo_conc=50, dntp_conc=0.25)
-    print 'Tm: ', seq.Tm
-    print 'DeltaG: ', seq.DeltaG
+    print('Tm: ', seq.Tm)
+    print('DeltaG: ', seq.DeltaG)
 
 if __name__ == '__main__':
     main()
