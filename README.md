@@ -1,6 +1,6 @@
 # mfeprimer-py3
 
-Python3 version of command line scripts of [MFEprimer-2.0](http://www.mfeprimer.com/)
+Python3 version initiative for command line scripts of [MFEprimer-2.0](http://www.mfeprimer.com/)
 
 ## Installation
 
