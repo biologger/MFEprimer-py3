@@ -16,6 +16,7 @@ Using `git` (optional):
 git clone https://github.com/Ulises-Rosas/mfeprimer-py3.git
 cd mfeprimer-py3
 python3 setup.py install
+python3 setup.py install_data
 ```
 
 ## Usage
